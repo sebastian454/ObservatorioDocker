@@ -11,6 +11,12 @@ run apt install -y yarn
 
 RUN apt-get install wget
 
+RUN gem install bundler
+RUN bundle install
+RUN bundle update --bundler
+
+RUN bundle exec rake assets:precompile
+
 
 
 WORKDIR $APP_ROOT
