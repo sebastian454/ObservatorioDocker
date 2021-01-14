@@ -10,13 +10,7 @@ run apt install -y yarn
 
 
 RUN apt-get install wget
-
-RUN wget http://www.freetds.org/files/stable/freetds-1.1.24.tar.gz
-RUN tar -xzf freetds-1.1.24.tar.gz
-RUN cd freetds-1.1.24
-RUN ./configure --prefix=/usr/local --with-tdsver=7.3
-RUN make
-RUN make install
+RUN  apt-get install freetds
 
 
 WORKDIR $APP_ROOT
