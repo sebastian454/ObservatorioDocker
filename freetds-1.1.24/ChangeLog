@@ -1,0 +1,237 @@
+Author: detule <ogjoneski@gmail.com>
+Date:   Sat Dec 7 08:05:31 2019 -0500
+
+    tds: More robust conversion from FLT to DECIMAL/NUMERIC
+
+    Conversion follows flt->string->numeric code-path.  In the first step
+    (flt->string via `sprintf`) we use `%f` conversion specifier to prevent
+    receiving a string with scientific notation back (as is the case,
+    potentially, with `%g`).
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Sun Feb 10 13:57:01 2019 +0000
+
+    Convert DocBook to XML format
+
+    Use xmlto instead of openjade.
+    Update main document, style sheet and build files.
+    Update documentation.
+    Now is not necessary to define DOCBOOK_DSL, if xmlto is found
+    the guide is compiled.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Fri Nov 29 14:27:10 2019 +0000
+
+    odbc: Support UTF-16 surrogate pairs in odbc_wide2utf and odbc_set_string_flag
+
+    This allows to accept code points above plane 0.
+    This fixes https://github.com/FreeTDS/freetds/issues/317.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Wed Oct 23 14:09:18 2019 +0100
+
+    odbc: Change SQL_DESC_OCTET_LENGTH value for wide character columns
+
+    SQL_DESC_OCTET_LENGTH should return the bytes needed for the buffer
+    needed to store the default conversion of the column.
+    For compatibility the default type for wide character columns
+    is SQL_C_CHAR that is the strings will be converted to multi-byte.
+    In FreeTDS the charset for multi-byte can be UTF-8 so assuming each
+    character will take one byte is wrong.
+    Use "max_bytes_per_char" value.
+
+    This fixes issue #305 on GitHub (https://github.com/FreeTDS/freetds/issues/305).
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Wed Oct 16 15:26:45 2019 +0100
+
+    tds: Fix some issues with server redirection
+
+    Server redirection is a feature used by MSSQL, specially Azure
+    to redirect a connection to another server.
+    Due to a bug the TLS session was not correctly closed for the
+    previous attempt causing the second connection to fail is
+    the first was using TLS (which is the common case for MSSQL).
+    Another issue was that Azure check the requested "server name"
+    field in the login to select the databases to provide.
+    Last was that MARS support was possibly disabled by first attempt
+    and so MARS support was not enabled for the final connection.
+
+    This fixed https://github.com/FreeTDS/freetds/issues/308
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Sat Sep 21 07:23:36 2019 +0100
+
+    Extends support for MS XML type
+
+    Make sure MS XML type is supported by CT-Library and DB-Library.
+    We need to map this type to a proper library type as MS XML
+    is not supported by proprietary libraries (DB-Library was abandoned,
+    CT-Library is written for Sybase).
+
+Author: Aaron M. Ucko <ucko@ncbi.nlm.nih.gov>
+Date:   Mon Jun 4 11:13:37 2018 -0400
+
+    ct.c (_ct_get_server_type): Handle CS_LONGCHAR_TYPE.
+
+    Map it to SYBVARCHAR when (possibly) using TDS 7+, and to SYBLONGCHAR
+    with older protocol versions.  Unconditional use of SYBLONGCHAR would
+    result in gratuitous Sybase-style substitution of single spaces for empty
+    strings under Microsoft SQL Server, which otherwise leaves them intact.
+
+    Add a comment summarizing the types that remain unhandled.
+
+    Co-Authored-By: Sergey Sikorskiy <ssikorsk@ncbi.nlm.nih.gov>
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Mon Oct 7 12:48:16 2019 +0100
+
+    Fix compilation under Solaris
+
+    Use system header for u?intXX_t types to avoid collisions.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Sun Sep 22 15:20:50 2019 +0100
+
+    Avoid macro side effect using MARS
+
+    TDS_PUT_A4LE macro could expand value multiple times causing multiple
+    increment of send_seq.
+    This should affect big endian machines with no GCC compilers.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Sat Aug 31 16:52:16 2019 +0100
+
+    tds: Apply character conversion for Sybase
+
+    In FreeTDS 1.0 conversion was moved from server to client.
+    However some code was missing to apply the conversion in all
+    directions. Apply conversion in all sensing and receiving of data.
+    For BCP we now need to use server column size as column_size
+    is adjusted for client conversion so can be much bigger than
+    server real column size (expected to match for BCP).
+
+    This fixes issue #260 ("handle different encoding when retrieve
+    rows got strange chars")
+
+Author: Evan Miller <emmiller@gmail.com>
+Date:   Fri Aug 30 15:03:04 2019 -0400
+
+    New CS_DATABASE property
+
+    Microsoft Azure does not allow switching databases after the connection
+    has been made, so we need a way to define the database name prior to the
+    call to `ct_connect`. Introduce a new, optional CS_DATABASE property
+    that can be configured with a string value using `ct_con_props`.
+
+    I have defined the constant / enum as 9302, as it appears that the other
+    93XX properties (CS_PORT and CS_CLIENTCHARSET) are also inventions of
+    FreeTDS.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Fri Aug 9 18:02:32 2019 +0100
+
+    ci: Remove old AppVeyor workaround
+
+    Do not rename wdf directory, this used to fix an issue compiling
+    however now is not necessary and making the build fail
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Fri Aug 9 17:39:21 2019 +0100
+
+    tds: Decrease log level for state changes
+
+    This erroneously was marked as ERROR but is just informational.
+    This fixes GitHub issue #300 raised by Francesco Abeni.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Tue Jul 9 09:26:43 2019 +0100
+
+    tds: Make sure UDT has varint set to 8
+
+Author: Eran Amitai <mayonada@gmail.com>
+Date:   Sat Jun 29 08:52:28 2019 +0100
+
+    dblib: read of varbinary columns into DBVARYBIN variables
+
+    Fix: varbinary columns don't bind correctly when bound to variables
+    declared as DBVARYBIN using the VARYBINBIND bind type - variable doesn't
+    get updated.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Fri May 10 17:18:01 2019 +0100
+
+    tds: Override correctly if "asa database" is used
+
+    The configuration section was not taken into account if "server:port"
+    was used.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Fri May 10 16:58:11 2019 +0100
+
+    tds: Override always port using "server:port" syntax
+
+    Avoid global setting in case there's no section for "server".
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Thu May 9 21:58:47 2019 +0100
+
+    Fix overriding server_name if "server:port" or "server\instance" are used
+
+    This allows Azure Managed SQL Server connections easily.
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Sun Apr 28 19:30:11 2019 +0100
+
+    Fix endian adjustment on PPC little endian
+
+    Code assumed PPC were always big endian.
+
+Author: rayrapetyan <robert.ayrapetyan@gmail.com>
+Date:   Tue Apr 16 20:26:57 2019 -0700
+
+    change severity for "DBPROCESS is dead or not enabled": EXINFO -> EXCOMM
+
+    "DBPROCESS is dead or not enabled" is a connectivity issue on the client
+    side, severity level should be EXCOMM at least.
+    It makes e.g.
+    https://github.com/pymssql/pymssql/blob/fda5fd38f30eaeeb40a911235692144493d69864/src/_mssql.pyx#L1168
+    to spin infinitely, never raising StopIteration (in case issue occurred in
+    the middle of fetching process).
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Fri Mar 29 09:44:34 2019 +0000
+
+    Do not install not executable files as executable
+
+    Configuration files and some documentation were installed as
+    executable using "make install".
+
+    Reported-by: Rüdiger Ihle
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Thu Mar 28 03:54:45 2019 +0000
+
+    cmake: Allow build from stable packaged version
+
+    For stable packaged version the version string was extracted from
+    configure file however the regular expression used not
+    supporting 1.x versions.
+
+Author: Alexey Basov <r313pp@gmail.com>
+Date:   Mon Mar 4 17:24:20 2019 +0300
+
+    Fix bulk insert multibyte string support in names
+
+    When column name (or table name in blob type case) has non ASCII characters length of such string was calculated incorrectly.
+    In such cases bulk insert has failed with:
+    Msg 4804, Level 17, State 1
+            While reading current row from host, a premature end-of-message was encountered--an incoming data stream was interrupted when the server expected to see more data. The host program may have terminated. Ensure that you are using a supported client application programming interface (API).
+
+Author: Frediano Ziglio <freddy77@gmail.com>
+Date:   Sun Mar 17 19:02:35 2019 +0000
+
+    ctlib: Fix cs_will_convert
+
+    Use CT-Library types, not TDS ones.
+
