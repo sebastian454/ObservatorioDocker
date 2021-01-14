@@ -1,0 +1,23 @@
+version: '3'
+
+volumes:
+  store:
+    driver: local
+  bundle:
+    driver: local
+
+services:
+  obs:
+    build: .
+    ports:
+      - 4000:4000
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+
+    stdin_open: true
+    # Enable sending signals (CTRL+C, CTRL+P + CTRL+Q) into the container:
+    tty: true
+    command: ./bin/start.sh
+    environment: &app_env
+      PORT: 4000
