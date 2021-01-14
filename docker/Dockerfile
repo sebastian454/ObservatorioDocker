@@ -10,7 +10,7 @@ run apt install -y yarn
 
 
 RUN apt-get install wget
-RUN  apt-get install freetds
+
 
 
 WORKDIR $APP_ROOT
