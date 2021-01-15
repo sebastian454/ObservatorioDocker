@@ -779,5 +779,16 @@
    }
    .coloR{
      background: #2db2a0 !important;
-     color: white !important; 
+     color: white !important;
    }
+   .derecha{
+     right: 0;
+   }
+.icnosI{
+  width: 25%;
+  margin: auto;
+}
+.icnosI2{
+  width: 120px;
+  margin: auto;
+}
