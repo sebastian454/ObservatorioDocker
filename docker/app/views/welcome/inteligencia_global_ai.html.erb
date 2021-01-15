@@ -9,11 +9,13 @@
  </div>
 
 
+
+
  <div class="container" onclick="closeMenu()">
    <div class="row">
      <div class="col-12">
        <div class="row no-gutters p-2" id="portada">
-         
+
          <div class="col-12 mb-4">
            <div class="row no-gutters">
              <div class="col-12 pt-5">
@@ -366,9 +368,50 @@
                  de demanda a través de la personalización de productos y mejoras de la
                  calidad (Ver Figura) (PWC, 2017a).</p>
              </div>
-             <div class="row align-items-center justify-content-center mb-5">
-               <div class="col-11 col-sm-9 col-md-7 col-lg-6">
-                 <img src="/images/img02.png" alt="" class="w-100">
+             <div class="row ">
+               <div class="col-12 ">
+                 <div class="center">
+                   <img src="/images/img02.png" alt="" class="w-100">
+                   <br>
+                 <canvas id="line-chart" width="100%" ></canvas>
+                 </div>
+                 <script type="text/javascript">
+                 new Chart(document.getElementById("line-chart"), {
+                     type: 'bar',
+                     data: {
+                       labels: [2018,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030],
+                       datasets: [{
+                           data: [0,2,2,3,3,4,5,8,9,11,12,12,13,13],
+                           label: "Productividad labolar",
+                           borderColor: "#3e95cd",
+                           fill: false
+                         }, {
+                           data: [0,2,3,3,4,4,5,9,9,12,12,13,14,14],
+                           label: "Personalización",
+                           borderColor: "#8e5ea2",
+                           fill: false
+                         }, {
+                           data: [0,2,3,3,4,4,5,9,9,12,12,13,14,14],
+                           label: "Ahorro de tiempo",
+                           borderColor: "red",
+                           fill: false
+                         }, {
+                           data: [0,2,3,4,5,7,8,10,11,13,13,14,15,16],
+                           label: "Calidad",
+                           borderColor: "cyan",
+                           fill: false
+                         }
+                       ]
+                     },
+                     options: {
+                       title: {
+                         display: true,
+                         text: 'Impacto del PIB mundial por efecto de la IA (en miles de millones de libras esterlinas)'
+                       }
+                     }
+                   });
+                 </script>
+
                  <small><i>Figura 2 Impacto en el PIB global por efecto de la AI, escenario principal. Adaptado de:
                      (PWC, 2017a).</i></small>
                </div>
@@ -390,6 +433,53 @@
                  <img src="/images/img03.png" alt="" class="w-100">
                  <small><i>Figura 3 Porcentaje de trabajadores que se encuentran en ocupaciones con alto riesgo de
                      automatización. Adaptado de (BID, 2018).</i></small>
+
+                     <br>
+
+                      <div class="container">
+                      <canvas id="myChart" width="50%"></canvas>
+                      </div>
+
+                      <script>
+                      var ctx = document.getElementById('myChart').getContext('2d');
+                      var myChart = new Chart(ctx, {
+                          type: 'horizontalBar',
+                          data: {
+                              labels: ['Guatemala', 'El Salvador', 'Ecuador', 'Costa Rica', 'Bolivia', 'Panamá', 'Nicaragua', 'Argentina', 'Paraguay', 'Uruguay', 'Replublica Dominicana', 'Estados Unidos'],
+                              datasets: [{
+                                  label: '# of Votes',
+                                  data: [75, 75, 69, 68, 67, 65,65,65,65,64,63,62,],
+                                  backgroundColor: [
+                                      'rgba(255, 99, 132, 0.2)',
+                                      'rgba(54, 162, 235, 0.2)',
+                                      'rgba(255, 206, 86, 0.2)',
+                                      'rgba(75, 192, 192, 0.2)',
+                                      'rgba(153, 102, 255, 0.2)',
+                                      'rgba(255, 159, 64, 0.2)'
+                                  ],
+                                  borderColor: [
+                                      'rgba(255, 99, 132, 1)',
+                                      'rgba(54, 162, 235, 1)',
+                                      'rgba(255, 206, 86, 1)',
+                                      'rgba(75, 192, 192, 1)',
+                                      'rgba(153, 102, 255, 1)',
+                                      'rgba(255, 159, 64, 1)'
+                                  ],
+                                  borderWidth: 1
+                              }]
+                          },
+                          options: {
+                              scales: {
+                                  yAxes: [{
+                                      ticks: {
+                                          beginAtZero: true
+                                      }
+                                  }]
+                              }
+                          }
+                      });
+                      </script>
+
                </div>
              </div>
              <div class="col-12">
@@ -437,6 +527,43 @@
                  <small><i>Figura 5 Diferencias entre ingresos tributarios de países de alto, mediano y bajo nivel de
                      ingresos.
                      Adaptado de: (Banco Mundial, 2019).</i></small>
+
+                  <br>
+                  <div class="center">
+
+                  <canvas id="line-chart2" width="100%" ></canvas>
+                  </div>
+                  <script type="text/javascript">
+                  new Chart(document.getElementById("line-chart2"), {
+                      type: 'line',
+                      data: {
+                        labels: [1980,1985,1990,1995,2000,2005,2010,2015,2018],
+                        datasets: [{
+                            data: [8,5,4,5,6,8,6,12,13],
+                            label: "Paises de ingreso bajp",
+                            borderColor: "#3e95cd",
+                            fill: false
+                          }, {
+                            data: [12,13,14,11,10,15,16,17,15],
+                            label: "Paises de ingreso mediano",
+                            borderColor: "#8e5ea2",
+                            fill: false
+                          }, {
+                            data: [16,18,17,19,18,20,22,25],
+                            label: "Paises de ingreso alto",
+                            borderColor: "cyan",
+                            fill: false
+                          }
+                        ]
+                      },
+                      options: {
+                        title: {
+                          display: true,
+                          text: 'Total de ingresos tributarios no relacionados con recursos naturales(%del PIB))'
+                        }
+                      }
+                    });
+                  </script>
                </div>
              </div>
              <div class="col-12">
